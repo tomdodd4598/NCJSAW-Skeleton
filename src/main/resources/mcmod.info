@@ -1,0 +1,13 @@
+[{
+    "modid": "ncjsaw_skeleton",
+    "name": "NCJSAW Skeleton",
+    "description": "Skeleton for an NCO Java script addon.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": []
+}]

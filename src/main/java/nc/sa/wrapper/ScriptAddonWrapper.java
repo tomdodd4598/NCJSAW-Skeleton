@@ -7,8 +7,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.CodeSource;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -39,8 +41,18 @@ public final class ScriptAddonWrapper {
         
         File ownJar;
         try {
-            URI uri = location.toURI();
-            ownJar = new File(uri).getCanonicalFile();
+            if ("jar".equals(location.getProtocol())) {
+                URLConnection connection = location.openConnection();
+                if (!(connection instanceof JarURLConnection)) {
+                    throw new IOException("Expected jar URL connection, got " + connection.getClass().getName());
+                }
+                URL jarFileUrl = ((JarURLConnection) connection).getJarFileURL();
+                ownJar = new File(jarFileUrl.toURI()).getCanonicalFile();
+            }
+            else {
+                URI uri = location.toURI();
+                ownJar = new File(uri).getCanonicalFile();
+            }
         }
         catch (Exception e) {
             throw new IOException("Could not determine own jar file from location " + location, e);
